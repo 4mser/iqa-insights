@@ -7,7 +7,7 @@ import HeatMapChart from '../graficos/HeatMapChart';
 
 const VisualizationPage: React.FC = () => {
   const [selection, setSelection] = useState('Contrast');
-  const data = IqaContrast;  // Asegúrate de que esto corresponda a tus datos importados
+  const data = IqaContrast;  
 
   const options = ['Contrast', 'Shading', 'Exposure'];
 

@@ -1,3 +1,5 @@
+'use client'
+
 export interface HoursDataItem {
     [column: string]: number;
 }

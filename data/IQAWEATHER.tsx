@@ -1,3 +1,5 @@
+'use client'
+
 export interface WeatherDataItem {
     [column: string]: number;
 }
