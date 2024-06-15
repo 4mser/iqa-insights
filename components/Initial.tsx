@@ -1,4 +1,5 @@
 'use client'
+
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import RenderScene from "@/components/RenderScene";
@@ -52,7 +53,7 @@ function Initial () {
   const [pageIndex, setPageIndex] = useState(0);
 
   return (
-    <div className="h-[100dvh] w-full flex flex-col transition-all justify-center items-cente overflow-y-autor">
+    <div className="h-[100dvh] w-full flex flex-col transition-all justify-center items-center overflow-y-auto">
       <nav className="absolute top-5 left-1/2 -translate-x-1/2 z-50  flex justify-between bg-black/20 backdrop-blur-lg border border-white/20 text-white p-2 rounded-full text-nowrap items-center gap-3">
         <div className="flex space-x-4">
           {pages.map((page, index) => (
@@ -62,7 +63,7 @@ function Initial () {
             className={`px-4 py-2 transition rounded-full ${
               pageIndex === index
               ? "bg-black text-white dark:bg-white dark:text-black"
-              : "hover:bg-black/20 dark:hover:bg-white/20   hover:text-white"
+              : "hover:bg-black/20 dark:hover:bg-white/20 hover:text-white"
             }`}
             >
               {page.title}
