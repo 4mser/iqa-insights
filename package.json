@@ -1,0 +1,45 @@
+{
+  "name": "iqa_insights",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@react-three/drei": "^9.105.6",
+    "@react-three/fiber": "^8.16.3",
+    "@react-three/postprocessing": "^2.16.2",
+    "apexcharts": "^3.49.0",
+    "chart.js": "^4.4.3",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
+    "d3": "^7.9.0",
+    "framer-motion": "^11.1.7",
+    "lucide-react": "^0.364.0",
+    "mongodb": "^6.5.0",
+    "mongoose": "^8.3.0",
+    "next": "14.2.4",
+    "next-cloudinary": "^6.5.0",
+    "react": "^18",
+    "react-apexcharts": "^1.4.1",
+    "react-dom": "^18",
+    "react-hook-form": "^7.51.3",
+    "tailwind-merge": "^2.2.2",
+    "tailwindcss-animate": "^1.0.7",
+    "three": "^0.164.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/three": "^0.164.0",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.4",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
