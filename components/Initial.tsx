@@ -24,7 +24,7 @@ const pages = [
     component: (
       <div className="w-full h-[100dvh] overflow-y-auto flex flex-col md:px-56 md:pt-20 ">
         <VisualizationPage />
-        <CombinedVisualizationPage />
+        {/* <CombinedVisualizationPage /> */}
       </div>
     ),
   },
