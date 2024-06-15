@@ -14,7 +14,6 @@ const pages = [
     component: (
       <div className="w-full h-full">
         <RenderScene />
-        test sin 3d
       </div>
     ),
   },
@@ -23,29 +22,29 @@ const pages = [
     title: "Charts",
     component: (
       <div className="w-full h-[100dvh] overflow-y-auto flex flex-col md:px-56 md:pt-20 ">
-        <VisualizationPage />
-        <CombinedVisualizationPage />
+        {/* <VisualizationPage />
+        <CombinedVisualizationPage /> */}
       </div>
     ),
   },
-//   {
-//     id: 2,
-//     title: "Insights",
-//     component: (
-//       <div className="w-full h-full ">
-//         <AdditionalCharts />
-//       </div>
-//     ),
-//   },
-//   {
-//     id: 3,
-//     title: "Gallery",
-//     component: (
-//       <div className="w-full h-full ">
-//         <AdditionalCharts />
-//       </div>
-//     ),
-//   },
+  {
+    id: 2,
+    title: "Insights",
+    component: (
+      <div className="w-full h-full ">
+        <AdditionalCharts />
+      </div>
+    ),
+  },
+  {
+    id: 3,
+    title: "Gallery",
+    component: (
+      <div className="w-full h-full ">
+        <AdditionalCharts />
+      </div>
+    ),
+  },
 ];
 
 export default function Initial () {
@@ -53,13 +52,13 @@ export default function Initial () {
 
   return (
     <div className="h-[100dvh] w-full flex flex-col transition-all justify-center items-center overflow-y-auto">
-      <nav className="absolute top-5 left-1/2 -translate-x-1/2 z-50  flex justify-between bg-black/20 backdrop-blur-lg border border-white/20 text-white p-2 rounded-full text-nowrap items-center gap-3">
-        <div className="flex space-x-4">
+      <nav className="absolute top-5 left-1/2 -translate-x-1/2 z-50  flex justify-between bg-black/20 backdrop-blur-lg border border-white/20 text-white p-2 rounded-full text-nowrap items-center  md:gap-3">
+        <div className="flex md:space-x-4">
           {pages.map((page, index) => (
             <button
             key={index}
             onClick={() => setPageIndex(index)}
-            className={`px-4 py-2 transition rounded-full ${
+            className={`px-4 py-2 text-xs md:text-base transition rounded-full  ${
               pageIndex === index
               ? "bg-black text-white dark:bg-white dark:text-black"
               : "hover:bg-black/20 dark:hover:bg-white/20 hover:text-white"
