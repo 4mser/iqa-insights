@@ -13,7 +13,8 @@ const pages = [
     title: "3D Scene",
     component: (
       <div className="w-full h-full flex-grow">
-        <RenderScene />
+        {/* <RenderScene /> */}
+        test sin 3d
       </div>
     ),
   },
