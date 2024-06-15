@@ -48,7 +48,7 @@ const pages = [
   },
 ];
 
-const Initial = () => {
+function Initial () {
   const [pageIndex, setPageIndex] = useState(0);
 
   return (
