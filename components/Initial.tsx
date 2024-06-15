@@ -23,29 +23,29 @@ const pages = [
     title: "Charts",
     component: (
       <div className="w-full h-[100dvh] overflow-y-auto flex flex-col md:px-56 md:pt-20 ">
-        {/* <VisualizationPage />
-        <CombinedVisualizationPage /> */}
+        <VisualizationPage />
+        <CombinedVisualizationPage />
       </div>
     ),
   },
-  {
-    id: 2,
-    title: "Insights",
-    component: (
-      <div className="w-full h-full ">
-        {/* <AdditionalCharts /> */}
-      </div>
-    ),
-  },
-  {
-    id: 3,
-    title: "Gallery",
-    component: (
-      <div className="w-full h-full ">
-        {/* <AdditionalCharts /> */}
-      </div>
-    ),
-  },
+//   {
+//     id: 2,
+//     title: "Insights",
+//     component: (
+//       <div className="w-full h-full ">
+//         <AdditionalCharts />
+//       </div>
+//     ),
+//   },
+//   {
+//     id: 3,
+//     title: "Gallery",
+//     component: (
+//       <div className="w-full h-full ">
+//         <AdditionalCharts />
+//       </div>
+//     ),
+//   },
 ];
 
 export default function Initial () {
