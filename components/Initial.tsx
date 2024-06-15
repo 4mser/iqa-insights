@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import RenderScene from "@/components/RenderScene";
@@ -13,7 +12,7 @@ const pages = [
     id: 0,
     title: "3D Scene",
     component: (
-      <div className="w-full h-full flex-grow">
+      <div className="w-full h-full">
         {/* <RenderScene /> */}
         test sin 3d
       </div>
@@ -23,9 +22,9 @@ const pages = [
     id: 1,
     title: "Charts",
     component: (
-      <div className="w-full h-[100dvh] overflow-y-auto flex-grow flex flex-col md:px-56 md:pt-20 ">
-        <VisualizationPage />
-        <CombinedVisualizationPage />
+      <div className="w-full h-[100dvh] overflow-y-auto flex flex-col md:px-56 md:pt-20 ">
+        {/* <VisualizationPage />
+        <CombinedVisualizationPage /> */}
       </div>
     ),
   },
@@ -33,8 +32,8 @@ const pages = [
     id: 2,
     title: "Insights",
     component: (
-      <div className="w-full h-full flex-grow">
-        <AdditionalCharts />
+      <div className="w-full h-full ">
+        {/* <AdditionalCharts /> */}
       </div>
     ),
   },
@@ -42,14 +41,14 @@ const pages = [
     id: 3,
     title: "Gallery",
     component: (
-      <div className="w-full h-full flex-grow">
-        <AdditionalCharts />
+      <div className="w-full h-full ">
+        {/* <AdditionalCharts /> */}
       </div>
     ),
   },
 ];
 
-function Initial () {
+export default function Initial () {
   const [pageIndex, setPageIndex] = useState(0);
 
   return (
@@ -94,4 +93,3 @@ function Initial () {
   );
 };
 
-export default Initial;
