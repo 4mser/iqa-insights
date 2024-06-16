@@ -1,4 +1,26 @@
+/* styles/globals.css */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-lightBg dark:bg-darkBg text-lightText dark:text-darkText transition-colors duration-300;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply font-sans;
+}
+
+.card {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+}

@@ -6,10 +6,23 @@ import VisualizationPage from "@/components/VisualizationPage";
 import CombinedVisualizationPage from "@/components/CombinedVisualizationPage";
 import AdditionalCharts from "@/components/AdditionalCharts";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
+import ExperimentPresentation from "./Presentation";
+import PaperCharts from "./PaperCharts";
+import Insights from "./Insights";
 
 const pages = [
+
   {
     id: 0,
+    title: "Presentation",
+    component: (
+      <div className="h-[100dvh] pt-20 overflow-y-auto bg-lightBg dark:bg-darkBg p-6 font-sans transition-colors duration-300">
+      <ExperimentPresentation />
+    </div>
+    ),
+  },
+  {
+    id: 1,
     title: "3D Scene",
     component: (
       <div className="w-full h-full">
@@ -18,33 +31,34 @@ const pages = [
     ),
   },
   {
-    id: 1,
+    id: 2,
     title: "Charts",
     component: (
-      <div className="w-full h-[100dvh] overflow-y-auto flex flex-col md:px-56 md:pt-20 ">
-        {/* <VisualizationPage />
-        <CombinedVisualizationPage /> */}
+      <div className="h-[100dvh] overflow-y-auto bg-lightBg dark:bg-darkBg p-6 font-sans transition-colors duration-300">
+      <div className="mt-20 grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="bg-lightCard dark:bg-darkCard p-6 rounded-lg shadow-3xl">
+          <VisualizationPage />
+        </div>
+        <div className="bg-lightCard dark:bg-darkCard p-6 rounded-lg shadow-3xl">
+          <CombinedVisualizationPage />
+        </div>
+        <div className="lg:col-span-2">
+          <PaperCharts />
+        </div>
       </div>
-    ),
-  },
-  {
-    id: 2,
-    title: "Insights",
-    component: (
-      <div className="w-full h-full ">
-        <AdditionalCharts />
-      </div>
+    </div>
     ),
   },
   {
     id: 3,
-    title: "Gallery",
+    title: "Insights",
     component: (
-      <div className="w-full h-full ">
-        <AdditionalCharts />
+      <div className="w-full h-[100dvh] pt-20 overflow-y-auto">
+        <Insights />
       </div>
     ),
   },
+  
 ];
 
 export default function Initial () {
