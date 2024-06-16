@@ -4,11 +4,11 @@ import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 
 function calculateAverages(data: { [column: string]: number }[]): { categories: string[], averages: number[] } {
-    let sums: { [key: string]: number } = {};
-    let counts: { [key: string]: number } = {};
+    const sums: { [key: string]: number } = {};
+    const counts: { [key: string]: number } = {};
     data.forEach(entry => {
         Object.keys(entry).forEach(column => {
-            if (entry[column] !== undefined) {
+            if (entry[column] !== undefined && entry[column] !== null && !isNaN(entry[column])) {
                 sums[column] = (sums[column] || 0) + entry[column];
                 counts[column] = (counts[column] || 0) + 1;
             }
@@ -35,45 +35,46 @@ interface ApexLineChartProps {
 }
 
 const ApexLineChart: React.FC<ApexLineChartProps> = ({ data, selection, color }) => {
-    // Verificación adicional de datos
+    const [isClient, setIsClient] = useState(false);
+    const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+    useEffect(() => {
+        setIsClient(true);
+
+        const handleThemeChange = () => {
+            const isDarkMode = document.documentElement.classList.contains('dark');
+            setTheme(isDarkMode ? 'dark' : 'light');
+        };
+
+        handleThemeChange(); // Set initial theme
+        const observer = new MutationObserver(handleThemeChange); // Watch for changes to the class attribute
+
+        // Observe the document element for class attribute changes
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+        // Clean up observer on component unmount
+        return () => {
+            observer.disconnect();
+        };
+    }, []);
+
+    if (!isClient) {
+        return null;
+    }
+
     if (!data || !data[selection] || !Array.isArray(data[selection]) || data[selection].length === 0) {
         console.error('Data or selection is invalid:', { data, selection });
         return <div>No data available</div>;
     }
 
     const { categories, averages } = calculateAverages(data[selection]);
-    const formattedAverages = averages.map(avg => parseFloat(avg?.toFixed(3) || '0'));
+    const formattedAverages = averages.map(avg => isNaN(avg) ? 0 : parseFloat(avg.toFixed(3)));
     const sortedData = categories.map((category, index) => ({
-        x: parseInt(category, 10),
+        x: isNaN(parseInt(category, 10)) ? 0 : parseInt(category, 10),
         y: formattedAverages[index]
     })).sort((a, b) => a.x - b.x);
 
-    const [theme, setTheme] = useState('light');
-
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const handleThemeChange = () => {
-                const isDarkMode = document.documentElement.classList.contains('dark');
-                setTheme(isDarkMode ? 'dark' : 'light');
-            };
-
-            handleThemeChange(); // Set initial theme
-            const observer = new MutationObserver(handleThemeChange); // Watch for changes to the class attribute
-
-            // Observe the document element for class attribute changes
-            observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-
-            // Clean up observer on component unmount
-            return () => {
-                observer.disconnect();
-            };
-        }
-    }, []);
-
-    const chartData: {
-        series: { name: string; data: { x: number; y: number }[] }[];
-        options: ApexOptions;
-    } = {
+    const chartData = {
         series: [{
             name: 'IQA Value',
             data: sortedData
@@ -129,7 +130,7 @@ const ApexLineChart: React.FC<ApexLineChartProps> = ({ data, selection, color })
                 borderColor: '#E2DEE7',
                 strokeDashArray: 5
             }
-        }
+        } as ApexOptions
     };
 
     return (
