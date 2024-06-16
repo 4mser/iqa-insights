@@ -27,9 +27,9 @@ const VisualizationPage: React.FC = () => {
         ))}
       </div>
       <p className=' text-neutral-800/80 font-bold dark:text-white/70 py-4'>{`Average IQA Values for ${selection}`}</p>
-      <ApexLineChart data={data} selection={selection} color="#4BCDF8"/>
+      {/* <ApexLineChart data={data} selection={selection} color="#4BCDF8"/> */}
       <div className=''>
-        <HeatMapChart data={data} selection={selection} color="#4BCDF8"/>
+        {/* <HeatMapChart data={data} selection={selection} color="#4BCDF8"/> */}
       </div>
     </div>
   );
