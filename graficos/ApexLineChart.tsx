@@ -1,8 +1,10 @@
-'use client'
+'use client';
 import React, { useEffect, useState } from 'react';
-import ReactApexChart from 'react-apexcharts';
+import dynamic from 'next/dynamic';
 import { ApexOptions } from 'apexcharts';
 import { useIsClient } from './useIsClient';  // Ajusta la ruta según sea necesario
+
+const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 function calculateAverages(data: { [column: string]: number }[]): { categories: string[], averages: number[] } {
     const sums: { [key: string]: number } = {};
@@ -63,12 +65,17 @@ const ApexLineChart: React.FC<ApexLineChartProps> = ({ data, selection, color })
         return null;
     }
 
+    // Verificación y limpieza de datos
     if (!data || !data[selection] || !Array.isArray(data[selection]) || data[selection].length === 0) {
         console.error('Data or selection is invalid:', { data, selection });
         return <div>No data available</div>;
     }
 
-    const { categories, averages } = calculateAverages(data[selection]);
+    const cleanedData = data[selection].filter(entry => {
+        return Object.values(entry).every(value => value !== undefined && value !== null && !isNaN(value));
+    });
+
+    const { categories, averages } = calculateAverages(cleanedData);
     const formattedAverages = averages.map(avg => isNaN(avg) ? 0 : parseFloat(avg.toFixed(3)));
     const sortedData = categories.map((category, index) => ({
         x: isNaN(parseInt(category, 10)) ? 0 : parseInt(category, 10),
