@@ -37,10 +37,10 @@ const pages = [
       <div className="h-[100dvh] overflow-y-auto bg-lightBg dark:bg-darkBg p-6 font-sans transition-colors duration-300">
       <div className="mt-20 grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="bg-lightCard dark:bg-darkCard p-6 rounded-lg shadow-3xl">
-          <VisualizationPage />
+          {/* <VisualizationPage /> */}
         </div>
         <div className="bg-lightCard dark:bg-darkCard p-6 rounded-lg shadow-3xl">
-          <CombinedVisualizationPage />
+          {/* <CombinedVisualizationPage /> */}
         </div>
         <div className="lg:col-span-2">
           <PaperCharts />
