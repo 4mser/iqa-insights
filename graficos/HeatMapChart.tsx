@@ -1,16 +1,21 @@
-'use client'
+'use client';
 
 import React from 'react';
-import ReactApexChart from 'react-apexcharts';
+import dynamic from 'next/dynamic';
 import { ApexOptions } from 'apexcharts';
+import { useIsClient } from './useIsClient'; // Ajusta la ruta según sea necesario
+
+const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 function calculateAverages(data: { [column: string]: number }[]): { categories: string[], averages: number[] } {
-    let sums: { [key: string]: number } = {};
-    let counts: { [key: string]: number } = {};
+    const sums: { [key: string]: number } = {};
+    const counts: { [key: string]: number } = {};
     data.forEach(entry => {
         Object.keys(entry).forEach(column => {
-            sums[column] = (sums[column] || 2) + entry[column];
-            counts[column] = (counts[column] || 0) + 1;
+            if (entry[column] !== undefined && entry[column] !== null && !isNaN(entry[column])) {
+                sums[column] = (sums[column] || 0) + entry[column];
+                counts[column] = (counts[column] || 0) + 1;
+            }
         });
     });
 
@@ -34,13 +39,34 @@ interface ApexLineChartProps {
 }
 
 const HeatMapChart: React.FC<ApexLineChartProps> = ({ data, selection, color }) => {
-    const { categories, averages } = calculateAverages(data[selection]);
+    const isClient = useIsClient();
+
+    if (!isClient) {
+        return null;
+    }
+
+    if (!data || !data[selection] || !Array.isArray(data[selection]) || data[selection].length === 0) {
+        console.error('Data or selection is invalid:', { data, selection });
+        return <div>No data available</div>;
+    }
+
+    // Verificación y limpieza de datos
+    const cleanedData = data[selection].filter(entry => {
+        return Object.values(entry).every(value => value !== undefined && value !== null && !isNaN(value));
+    });
+
+    if (cleanedData.length === 0) {
+        console.error('No valid data available after cleaning.');
+        return <div>No valid data available</div>;
+    }
+
+    const { categories, averages } = calculateAverages(cleanedData);
 
     // Redondeo a dos decimales directamente en la serie
     const formattedAverages = averages.map(avg => parseFloat(avg.toFixed(3)));
 
     const sortedData = categories.map((category, index) => ({
-        x: parseInt(category),
+        x: isNaN(parseInt(category)) ? 0 : parseInt(category),
         y: formattedAverages[index]
     })).sort((a, b) => a.x - b.x);
 
@@ -55,7 +81,7 @@ const HeatMapChart: React.FC<ApexLineChartProps> = ({ data, selection, color }) 
         options: {
             chart: {
                 height: 85,
-                type: 'line',
+                type: 'heatmap',
                 zoom: {
                     enabled: false
                 },
@@ -79,10 +105,10 @@ const HeatMapChart: React.FC<ApexLineChartProps> = ({ data, selection, color }) 
                 type: 'category',
                 labels: {
                     style: {
-                      colors: ['#FFFFFF','#FFFFFF','#FFFFFF','#FFFFFF','#FFFFFF','#FFFFFF','#FFFFFF','#FFFFFF','#FFFFFF'],
-                      fontSize: '0px'
+                        colors: ['#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF'],
+                        fontSize: '0px'
                     }
-                  }
+                }
             },
             yaxis: {
                 title: {
@@ -103,7 +129,7 @@ const HeatMapChart: React.FC<ApexLineChartProps> = ({ data, selection, color }) 
     };
 
     return (
-            <ReactApexChart options={chartData.options} series={chartData.series} type="heatmap" height={70} />
+        <ReactApexChart options={chartData.options} series={chartData.series} type="heatmap" height={70} />
     );
 };
 
