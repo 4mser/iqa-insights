@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import { useIsClient } from './useIsClient';  // Ajusta la ruta según sea necesario
+import ClientOnly from './ClientOnly';  // Ajusta la ruta según sea necesario
 
 function calculateAverages(data: { [column: string]: number }[]): { categories: string[], averages: number[] } {
     const sums: { [key: string]: number } = {};
@@ -36,32 +36,25 @@ interface ApexLineChartProps {
 }
 
 const ApexLineChart: React.FC<ApexLineChartProps> = ({ data, selection, color }) => {
-    const isClient = useIsClient();
     const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
     useEffect(() => {
-        if (isClient) {
-            const handleThemeChange = () => {
-                const isDarkMode = document.documentElement.classList.contains('dark');
-                setTheme(isDarkMode ? 'dark' : 'light');
-            };
+        const handleThemeChange = () => {
+            const isDarkMode = document.documentElement.classList.contains('dark');
+            setTheme(isDarkMode ? 'dark' : 'light');
+        };
 
-            handleThemeChange(); // Set initial theme
-            const observer = new MutationObserver(handleThemeChange); // Watch for changes to the class attribute
+        handleThemeChange(); // Set initial theme
+        const observer = new MutationObserver(handleThemeChange); // Watch for changes to the class attribute
 
-            // Observe the document element for class attribute changes
-            observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+        // Observe the document element for class attribute changes
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 
-            // Clean up observer on component unmount
-            return () => {
-                observer.disconnect();
-            };
-        }
-    }, [isClient]);
-
-    if (!isClient) {
-        return null;
-    }
+        // Clean up observer on component unmount
+        return () => {
+            observer.disconnect();
+        };
+    }, []);
 
     if (!data || !data[selection] || !Array.isArray(data[selection]) || data[selection].length === 0) {
         console.error('Data or selection is invalid:', { data, selection });
@@ -135,7 +128,9 @@ const ApexLineChart: React.FC<ApexLineChartProps> = ({ data, selection, color })
     };
 
     return (
-        <ReactApexChart options={chartData.options} series={chartData.series} type="line" height={230} />
+        <ClientOnly>
+            <ReactApexChart options={chartData.options} series={chartData.series} type="line" height={230} />
+        </ClientOnly>
     );
 };
 
