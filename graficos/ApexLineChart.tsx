@@ -8,8 +8,10 @@ function calculateAverages(data: { [column: string]: number }[]): { categories: 
     let counts: { [key: string]: number } = {};
     data.forEach(entry => {
         Object.keys(entry).forEach(column => {
-            sums[column] = (sums[column] || 0) + entry[column];
-            counts[column] = (counts[column] || 0) + 1;
+            if (entry[column] !== undefined) {
+                sums[column] = (sums[column] || 0) + entry[column];
+                counts[column] = (counts[column] || 0) + 1;
+            }
         });
     });
 
@@ -33,31 +35,39 @@ interface ApexLineChartProps {
 }
 
 const ApexLineChart: React.FC<ApexLineChartProps> = ({ data, selection, color }) => {
+    // Verificación adicional de datos
+    if (!data || !data[selection] || !Array.isArray(data[selection]) || data[selection].length === 0) {
+        console.error('Data or selection is invalid:', { data, selection });
+        return <div>No data available</div>;
+    }
+
     const { categories, averages } = calculateAverages(data[selection]);
-    const formattedAverages = averages.map(avg => parseFloat(avg.toFixed(3)));
+    const formattedAverages = averages.map(avg => parseFloat(avg?.toFixed(3) || '0'));
     const sortedData = categories.map((category, index) => ({
-        x: parseInt(category),
+        x: parseInt(category, 10),
         y: formattedAverages[index]
     })).sort((a, b) => a.x - b.x);
 
     const [theme, setTheme] = useState('light');
 
     useEffect(() => {
-        const handleThemeChange = () => {
-            const isDarkMode = document.documentElement.classList.contains('dark');
-            setTheme(isDarkMode ? 'dark' : 'light');
-        };
+        if (typeof window !== 'undefined') {
+            const handleThemeChange = () => {
+                const isDarkMode = document.documentElement.classList.contains('dark');
+                setTheme(isDarkMode ? 'dark' : 'light');
+            };
 
-        handleThemeChange(); // Set initial theme
-        const observer = new MutationObserver(handleThemeChange); // Watch for changes to the class attribute
+            handleThemeChange(); // Set initial theme
+            const observer = new MutationObserver(handleThemeChange); // Watch for changes to the class attribute
 
-        // Observe the document element for class attribute changes
-        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+            // Observe the document element for class attribute changes
+            observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 
-        // Clean up observer on component unmount
-        return () => {
-            observer.disconnect();
-        };
+            // Clean up observer on component unmount
+            return () => {
+                observer.disconnect();
+            };
+        }
     }, []);
 
     const chartData: {
