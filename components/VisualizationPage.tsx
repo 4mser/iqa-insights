@@ -12,13 +12,13 @@ const VisualizationPage: React.FC = () => {
   const options = ['Contrast', 'Shading', 'Exposure'];
 
   return (
-    <div className='p-4 mt-20 md:mt-0'>
+    <div className='p-4'>
       <div className='flex space-x-2'>
         {options.map(option => (
           <button
             key={option}
-            className={`py-2 px-4 rounded-full ${
-              selection === option ? 'bg-sky-400/20 border border-sky-400 text-white' : ' text-black dark:text-white'
+            className={`py-2 px-4 text-xs md:text-base rounded-full ${
+              selection === option ? 'bg-cyan-400/20 border border-cyan-400 dark:text-white text-black' : ' text-black dark:text-white'
             }`}
             onClick={() => setSelection(option)}
           >

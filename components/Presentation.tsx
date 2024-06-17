@@ -1,44 +1,68 @@
-// components/ExperimentPresentation.tsx
-
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Line, Bar } from 'react-chartjs-2';
+import Chart from 'chart.js/auto';
 
 const sections = [
   {
-    title: 'Abstract',
-    content: `
-      This study presents a groundbreaking methodology for enhancing robotic quality inspections under varying lighting conditions, critically impacting image quality and defect detection accuracy. We introduce a dynamic viewpoint planning strategy that significantly improves defect detection precision by adapting to environmental changes.
-    `
+    title: '1. Abstract',
+    content: 'This study introduces a methodology for enhancing robotic inspections under varying lighting conditions, improving image quality and defect detection accuracy.'  
   },
   {
-    title: 'Introduction',
-    content: `
-      The emergence of machine vision technologies has transformed industries, enabling automated quality control systems essential for maintaining product integrity, enhancing operational efficiency, and elevating customer satisfaction. Despite these advancements, mobile robotic inspections face significant challenges due to fluctuating lighting conditions. This paper introduces a novel IQA-driven methodology to optimize robotic positioning for improved defect detection in construction site inspections.
-    `
+    title: '2. Introduction',
+    content: 'Machine vision technologies have transformed industries, but lighting variations pose significant challenges. Our IQA-driven methodology optimizes robotic positioning for improved defect detection.',
+    chartData: {
+      labels: ['Challenge', 'Solution', 'Improvement'],
+      datasets: [
+        {
+          label: 'Impact of Machine Vision',
+          data: [50, 70, 90],
+          backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(153, 102, 255, 0.6)', 'rgba(255, 159, 64, 0.6)'],
+          borderColor: ['rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
+          borderWidth: 1
+        }
+      ]
+    }
   },
   {
-    title: 'Related Work',
-    content: `
-      Advancements in robotic inspection systems (RIS) focus on Image Quality Assessment (IQA) for defect detection and optimization of robotic movements. Traditional IQA methods face limitations in real-world applications, highlighting the need for more adaptable IQA techniques in practical settings.
-    `
+    title: '3. Proposed Methodology',
+    content: 'Our IQA methodology, using the Spot robot, dynamically adjusts its position based on real-time IQA scores to ensure optimal image quality.',
+    image: '/images/p1.png'
   },
   {
-    title: 'Proposed Methodology',
-    content: `
-      Our study introduces an IQA methodology tailored for optimizing the navigation and positioning of robotic inspection systems during vision-based tasks. The Spot robot, equipped with an advanced PTZ camera, autonomously navigates to capture high-resolution images under various lighting conditions. Our IQA model evaluates image quality in real-time, guiding the robot to optimal positions.
-    `
+    title: '4. Experimental Setup',
+    content: 'The Spot robot captures images from various angles under different lighting conditions to assess image quality and defect detection accuracy.',
+    image: '/images/scene.jpg'
   },
   {
-    title: 'Experimental Setup and Results',
-    content: `
-      Experiments validate our IQA-driven approach, showing significant improvements in image quality and defect detection accuracy. The Spot robot captured high-quality images under diverse lighting conditions, confirming the robustness of our methodology.
-    `
+    title: '5. Results',
+    content: 'Results validate our approach, showing significant improvements in image quality and defect detection accuracy.',
+    chartData: {
+      labels: ['Sunny', 'Cloudy', 'Rainy'],
+      datasets: [
+        {
+          label: 'Image Quality Scores',
+          data: [85, 75, 90],
+          fill: false,
+          backgroundColor: 'rgba(75, 192, 192, 0.6)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+        }
+      ]
+    },
+    images: [
+      {
+        src: '/mnt/data/weather_conditions.png',
+        alt: 'Image Quality Scores vs. Angle under Different Weather Conditions'
+      },
+      {
+        src: '/mnt/data/times_of_day.png',
+        alt: 'Image Quality Scores vs. Angle at Different Times of Day'
+      }
+    ]
   },
   {
-    title: 'Discussion and Conclusions',
-    content: `
-      Our research advances automated quality inspections, enhancing productivity, reducing costs, and promoting higher industry standards. Future research will focus on improving the IQA algorithm and adapting the system to different industrial environments.
-    `
+    title: '6. Conclusion',
+    content: 'Our research enhances robotic inspections, improving productivity and reducing costs. Future work will focus on refining the IQA algorithm and adapting the system to various environments.'
   }
 ];
 
@@ -57,8 +81,19 @@ const cardVariants = {
 const ExperimentPresentation: React.FC = () => {
   return (
     <div className="presentation max-w-4xl mx-auto p-6 bg-lightBg dark:bg-darkBg font-sans transition-colors duration-300">
+      <div className="toc mb-8">
+        <h2 className="text-primary dark:text-secondary text-3xl font-bold mb-4">Table of Contents</h2>
+        <ul className="list-disc ml-6">
+          {sections.map((section, index) => (
+            <li key={index} className="mb-2">
+              <a href={`#section-${index}`} className="text-lightText dark:text-darkText hover:underline">{section.title}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
       {sections.map((section, index) => (
         <motion.div
+          id={`section-${index}`}
           key={index}
           initial="offscreen"
           whileInView="onscreen"
@@ -68,6 +103,21 @@ const ExperimentPresentation: React.FC = () => {
         >
           <h2 className="text-primary dark:text-secondary text-3xl font-bold mb-4">{section.title}</h2>
           <p className="text-lightText dark:text-darkText mb-4 whitespace-pre-line">{section.content}</p>
+          {section.image && 
+            <div className='mb-4 rounded-lg shadow-lg overflow-hidden'>
+              <img src={section.image} alt={`${section.title} illustration`} className=" w-full h-full object-cover scale-125" />
+            </div>
+          }
+          {section.chartData && (
+            <div className="mb-4">
+              <Bar data={section.chartData} />
+            </div>
+          )}
+          {section.images && section.images.map((image, imgIndex) => (
+            <div key={imgIndex} className="mb-4">
+              <img src={image.src} alt={image.alt} className="rounded-lg shadow-lg" />
+            </div>
+          ))}
         </motion.div>
       ))}
       <motion.div

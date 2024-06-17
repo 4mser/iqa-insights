@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import { IqaWeather } from '@/data/IQAWEATHER';
 import { IqaHours } from '@/data/IQAHOURS';
-import ChartJSHeatMapChart from '@/graficos/ChartJSHeatMapChart';
 import ChartJSLineChart from '@/graficos/ChartJSLineChart';
+import ChartJSHeatMapChart from '@/graficos/ChartJSHeatMapChart';
+
 export interface DataItem {
     [column: string]: number;
 }
@@ -37,8 +38,8 @@ const CombinedVisualizationPage: React.FC = () => {
                 {hourOptions.map(option => (
                     <button
                         key={option}
-                        className={`py-2 px-4 rounded-full ${
-                            hourSelection === option ? 'bg-red-500 text-white' : ' text-black dark:text-white'
+                        className={`py-2 text-xs text-nowrap md:text-base px-4 rounded-full ${
+                            hourSelection === option ? 'bg-red-500/20 border border-red-500  dark:text-white text-black' : ' text-black dark:text-white'
                         }`}
                         onClick={() => setHourSelection(option)}
                     >
@@ -50,8 +51,8 @@ const CombinedVisualizationPage: React.FC = () => {
                 {weatherOptions.map(option => (
                     <button
                         key={option}
-                        className={`py-2 px-4 rounded-full ${
-                            weatherSelection === option ? 'bg-red-500 text-white' : ' text-black dark:text-white'
+                        className={`py-2 text-xs text-nowrap md:text-base px-4 rounded-full ${
+                            weatherSelection === option ? 'bg-red-500/20 border-red-500 border dark:text-white text-black ' : ' text-black dark:text-white '
                         }`}
                         onClick={() => setWeatherSelection(option)}
                     >
@@ -81,10 +82,7 @@ const CombinedVisualizationPage: React.FC = () => {
 };
 
 function calculateCombinedAverages(weatherData: DataItem[], hourData: DataItem[], weatherSelection: string, hourSelection: string): DataItem[] {
-    // Encontrar el rango completo de valores de eje x
-    const allKeys = Object.keys(Object.assign({}, ...weatherData, ...hourData));
-    const xAxisCategories = allKeys.sort((a, b) => parseInt(a) - parseInt(b));
-
+    const allKeys = Object.keys(Object.assign({}, ...weatherData, ...hourData)).sort((a, b) => parseInt(a) - parseInt(b));
     const combined = [];
 
     for (let index = 0; index < Math.max(weatherData.length, hourData.length); index++) {
@@ -93,7 +91,7 @@ function calculateCombinedAverages(weatherData: DataItem[], hourData: DataItem[]
 
         let combinedItem: DataItem = {};
 
-        xAxisCategories.forEach(key => {
+        allKeys.forEach(key => {
             const weatherValue = weatherSelection ? wItem[key] ?? 0 : 0;
             const hourValue = hourSelection ? hItem[key] ?? 0 : 0;
             combinedItem[key] = (weatherValue + hourValue) / 2;
@@ -102,7 +100,7 @@ function calculateCombinedAverages(weatherData: DataItem[], hourData: DataItem[]
         combined.push(combinedItem);
     }
 
-    return combined;
+    return combined.sort((a, b) => parseInt(Object.keys(a)[0]) - parseInt(Object.keys(b)[0]));
 }
 
 export default CombinedVisualizationPage;
