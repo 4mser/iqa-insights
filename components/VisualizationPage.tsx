@@ -12,7 +12,7 @@ const VisualizationPage: React.FC = () => {
   const options = ['Contrast', 'Shading', 'Exposure'];
 
   return (
-    <div className='p-4'>
+    <div className=''>
       <div className='flex space-x-2'>
         {options.map(option => (
           <button
