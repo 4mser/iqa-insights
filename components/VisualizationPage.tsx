@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { IqaContrast } from '@/data/IQACONTRAST';
 
 import ChartJSHeatMapChart from '@/graficos/ChartJSHeatMapChart';
-import ChartJSLineChart from '@/graficos/ChartJsLineChart';
+import ChartJSLineChart from '@/graficos/ChartJSLineChart';
 const VisualizationPage: React.FC = () => {
   const [selection, setSelection] = useState('Contrast');
   const data = IqaContrast;
