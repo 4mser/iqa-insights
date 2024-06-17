@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { IqaWeather } from '@/data/IQAWEATHER';
 import { IqaHours } from '@/data/IQAHOURS';
 import ChartJSHeatMapChart from '@/graficos/ChartJSHeatMapChart';
-import ChartJSLineChart from '@/graficos/ChartJsLineChart';
+import ChartJSLineChart from '@/graficos/ChartJSLineChart';
 export interface DataItem {
     [column: string]: number;
 }
