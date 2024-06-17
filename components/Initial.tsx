@@ -40,7 +40,7 @@ const pages = [
           <VisualizationPage />
         </div>
         <div className="bg-lightCard dark:bg-darkCard p-6 rounded-lg shadow-3xl">
-          {/* <CombinedVisualizationPage /> */}
+          <CombinedVisualizationPage />
         </div>
         <div className="lg:col-span-2">
           <PaperCharts />

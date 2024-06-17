@@ -1,20 +1,15 @@
-'use client';
+'use client'
 import React, { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
+import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import { useIsClient } from './useIsClient';  // Ajusta la ruta según sea necesario
-
-const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 function calculateAverages(data: { [column: string]: number }[]): { categories: string[], averages: number[] } {
-    const sums: { [key: string]: number } = {};
-    const counts: { [key: string]: number } = {};
+    let sums: { [key: string]: number } = {};
+    let counts: { [key: string]: number } = {};
     data.forEach(entry => {
         Object.keys(entry).forEach(column => {
-            if (entry[column] !== undefined && entry[column] !== null && !isNaN(entry[column])) {
-                sums[column] = (sums[column] || 0) + entry[column];
-                counts[column] = (counts[column] || 0) + 1;
-            }
+            sums[column] = (sums[column] || 0) + entry[column];
+            counts[column] = (counts[column] || 0) + 1;
         });
     });
 
@@ -38,12 +33,16 @@ interface ApexLineChartProps {
 }
 
 const ApexLineChart: React.FC<ApexLineChartProps> = ({ data, selection, color }) => {
-    const isClient = useIsClient();
-    const [theme, setTheme] = useState<'light' | 'dark'>('light');
+    const { categories, averages } = calculateAverages(data[selection]);
+    const formattedAverages = averages.map(avg => parseFloat(avg.toFixed(3)));
+    const sortedData = categories.map((category, index) => ({
+        x: parseInt(category),
+        y: formattedAverages[index]
+    })).sort((a, b) => a.x - b.x);
+
+    const [theme, setTheme] = useState('light');
 
     useEffect(() => {
-        if (!isClient) return;
-
         const handleThemeChange = () => {
             const isDarkMode = document.documentElement.classList.contains('dark');
             setTheme(isDarkMode ? 'dark' : 'light');
@@ -59,30 +58,12 @@ const ApexLineChart: React.FC<ApexLineChartProps> = ({ data, selection, color })
         return () => {
             observer.disconnect();
         };
-    }, [isClient]);
+    }, []);
 
-    if (!isClient) {
-        return null;
-    }
-
-    // Verificación y limpieza de datos
-    if (!data || !data[selection] || !Array.isArray(data[selection]) || data[selection].length === 0) {
-        console.error('Data or selection is invalid:', { data, selection });
-        return <div>No data available</div>;
-    }
-
-    const cleanedData = data[selection].filter(entry => {
-        return Object.values(entry).every(value => value !== undefined && value !== null && !isNaN(value));
-    });
-
-    const { categories, averages } = calculateAverages(cleanedData);
-    const formattedAverages = averages.map(avg => isNaN(avg) ? 0 : parseFloat(avg.toFixed(3)));
-    const sortedData = categories.map((category, index) => ({
-        x: isNaN(parseInt(category, 10)) ? 0 : parseInt(category, 10),
-        y: formattedAverages[index]
-    })).sort((a, b) => a.x - b.x);
-
-    const chartData = {
+    const chartData: {
+        series: { name: string; data: { x: number; y: number }[] }[];
+        options: ApexOptions;
+    } = {
         series: [{
             name: 'IQA Value',
             data: sortedData
@@ -138,7 +119,7 @@ const ApexLineChart: React.FC<ApexLineChartProps> = ({ data, selection, color })
                 borderColor: '#E2DEE7',
                 strokeDashArray: 5
             }
-        } as ApexOptions
+        }
     };
 
     return (

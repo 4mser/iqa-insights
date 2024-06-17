@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
 import React, { useState } from 'react';
 import { IqaContrast } from '@/data/IQACONTRAST';
-import ApexLineChart from '../graficos/ApexLineChart';
-import HeatMapChart from '../graficos/HeatMapChart';
 
+import ChartJSHeatMapChart from '@/graficos/ChartJSHeatMapChart';
+import ChartJSLineChart from '@/graficos/ChartJsLineChart';
 const VisualizationPage: React.FC = () => {
   const [selection, setSelection] = useState('Contrast');
-  const data = IqaContrast;  
+  const data = IqaContrast;
 
   const options = ['Contrast', 'Shading', 'Exposure'];
 
@@ -18,7 +18,7 @@ const VisualizationPage: React.FC = () => {
           <button
             key={option}
             className={`py-2 px-4 rounded-full ${
-              selection === option ? 'bg-sky-400 text-white' : ' text-black dark:text-white'
+              selection === option ? 'bg-sky-400/20 border border-sky-400 text-white' : ' text-black dark:text-white'
             }`}
             onClick={() => setSelection(option)}
           >
@@ -27,9 +27,9 @@ const VisualizationPage: React.FC = () => {
         ))}
       </div>
       <p className=' text-neutral-800/80 font-bold dark:text-white/70 py-4'>{`Average IQA Values for ${selection}`}</p>
-      <ApexLineChart data={data} selection={selection} color="#4BCDF8"/>
-      <div className=''>
-        <HeatMapChart data={data} selection={selection} color="#4BCDF8"/>
+      <ChartJSLineChart data={data} selection={selection} color="rgba(75, 192, 192, 1)"/>
+      <div className='mt-8'>
+        <ChartJSHeatMapChart data={data} selection={selection} color="75, 192, 192"/>
       </div>
     </div>
   );
