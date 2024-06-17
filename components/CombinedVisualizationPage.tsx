@@ -33,12 +33,12 @@ const CombinedVisualizationPage: React.FC = () => {
     const weatherOptions = ['Sunny', 'Cloudy', 'Rainy'];
 
     return (
-        <section className='p-4'>
+        <section className=''>
             <div className='flex space-x-2 mb-4'>
                 {hourOptions.map(option => (
                     <button
                         key={option}
-                        className={`py-2 text-xs text-nowrap md:text-base px-4 rounded-full ${
+                        className={`py-2 text-xs md:text-base px-4 rounded-full ${
                             hourSelection === option ? 'bg-red-500/20 border border-red-500  dark:text-white text-black' : ' text-black dark:text-white'
                         }`}
                         onClick={() => setHourSelection(option)}
