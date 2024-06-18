@@ -10,9 +10,11 @@ module.exports = {
     extend: {
       colors: {
         darkBg: '#121212',
+        lightBg: '#F9FAFB',
+        sunriseBg: '#FFDDC1',
+        sunsetBg: '#FFA07A',
         darkCard: '#1E1E1E',
         darkText: '#E0E0E0',
-        lightBg: '#F9FAFB',
         lightCard: '#FFFFFF',
         lightText: '#333333',
         secondary: '#FFFFFF',

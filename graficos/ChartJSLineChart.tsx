@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
-import { ChartData, ChartOptions } from 'chart.js';
+import { Chart, ChartData, ChartOptions, TooltipItem, TooltipModel, ChartTypeRegistry } from 'chart.js';
 import { useIsClient } from './useIsClient';  // Ajusta la ruta según sea necesario
 
 function calculateAverages(data: { [column: string]: number }[]): { labels: string[], averages: number[] } {
@@ -17,7 +17,7 @@ function calculateAverages(data: { [column: string]: number }[]): { labels: stri
         });
     });
 
-    const labels = Object.keys(sums);
+    const labels = Object.keys(sums).sort((a, b) => Number(a) - Number(b));  // Convertir a número y ordenar
     const averages = labels.map(key => sums[key] / counts[key]);
     return { labels, averages };
 }
@@ -81,7 +81,7 @@ const ChartJSLineChart: React.FC<ChartJSLineChartProps> = ({ data, selection, co
     const { labels, averages } = calculateAverages(cleanedData);
 
     const chartData: ChartData<'line'> = {
-        labels: labels,
+        labels: labels,  // No need to convert to string as ChartJS handles it
         datasets: [
             {
                 label: 'IQA Value',
@@ -105,7 +105,15 @@ const ChartJSLineChart: React.FC<ChartJSLineChartProps> = ({ data, selection, co
                 }
             },
             tooltip: {
-                enabled: true
+                enabled: true,
+                mode: 'nearest', // Modo para activar el tooltip al pasar por el área en el eje Y
+                intersect: false,
+                callbacks: {
+                    label: function (context: TooltipItem<'line'>) {
+                        const value = context.raw as number;
+                        return `IQA Value: ${value.toFixed(2)}`;
+                    }
+                }
             }
         },
         scales: {

@@ -22,15 +22,23 @@ const CombinedVisualizationPage: React.FC = () => {
 
     useEffect(() => {
         setLoading(true);
-        const weatherData = IqaWeather[weatherSelection] ?? [];
-        const hourData = IqaHours[hourSelection] ?? [];
-        const combinedAverages = calculateCombinedAverages(weatherData, hourData, weatherSelection, hourSelection);
+        const weatherData = weatherSelection ? IqaWeather[weatherSelection] : [];
+        const hourData = hourSelection ? IqaHours[hourSelection] : [];
+        const combinedAverages = calculateCombinedAverages(weatherData, hourData);
         setCombinedData(combinedAverages);
         setLoading(false);
     }, [weatherSelection, hourSelection]);
 
     const hourOptions = ['9-12AM', '12PM-3PM', '3PM-5PM', '5PM-Sunset'];
     const weatherOptions = ['Sunny', 'Cloudy', 'Rainy'];
+
+    const toggleSelection = (option: string, type: 'hour' | 'weather') => {
+        if (type === 'hour') {
+            setHourSelection(prev => (prev === option ? '' : option));
+        } else {
+            setWeatherSelection(prev => (prev === option ? '' : option));
+        }
+    };
 
     return (
         <section className=''>
@@ -39,9 +47,9 @@ const CombinedVisualizationPage: React.FC = () => {
                     <button
                         key={option}
                         className={`py-2 text-xs md:text-base px-4 rounded-full ${
-                            hourSelection === option ? 'bg-red-500/20 border border-red-500  dark:text-white text-black' : ' text-black dark:text-white'
+                            hourSelection === option ? 'bg-red-500/20 border border-red-500 dark:text-white text-black' : 'text-black dark:text-white'
                         }`}
-                        onClick={() => setHourSelection(option)}
+                        onClick={() => toggleSelection(option, 'hour')}
                     >
                         {option}
                     </button>
@@ -52,9 +60,9 @@ const CombinedVisualizationPage: React.FC = () => {
                     <button
                         key={option}
                         className={`py-2 text-xs text-nowrap md:text-base px-4 rounded-full ${
-                            weatherSelection === option ? 'bg-red-500/20 border-red-500 border dark:text-white text-black ' : ' text-black dark:text-white '
+                            weatherSelection === option ? 'bg-red-500/20 border-red-500 border dark:text-white text-black' : 'text-black dark:text-white'
                         }`}
-                        onClick={() => setWeatherSelection(option)}
+                        onClick={() => toggleSelection(option, 'weather')}
                     >
                         {option}
                     </button>
@@ -81,8 +89,8 @@ const CombinedVisualizationPage: React.FC = () => {
     );
 };
 
-function calculateCombinedAverages(weatherData: DataItem[], hourData: DataItem[], weatherSelection: string, hourSelection: string): DataItem[] {
-    const allKeys = Object.keys(Object.assign({}, ...weatherData, ...hourData)).sort((a, b) => parseInt(a) - parseInt(b));
+function calculateCombinedAverages(weatherData: DataItem[], hourData: DataItem[]): DataItem[] {
+    const allKeys = Object.keys(Object.assign({}, ...weatherData, ...hourData)).map(Number).sort((a, b) => a - b);
     const combined = [];
 
     for (let index = 0; index < Math.max(weatherData.length, hourData.length); index++) {
@@ -92,15 +100,15 @@ function calculateCombinedAverages(weatherData: DataItem[], hourData: DataItem[]
         let combinedItem: DataItem = {};
 
         allKeys.forEach(key => {
-            const weatherValue = weatherSelection ? wItem[key] ?? 0 : 0;
-            const hourValue = hourSelection ? hItem[key] ?? 0 : 0;
+            const weatherValue = wItem[key] ?? 0;
+            const hourValue = hItem[key] ?? 0;
             combinedItem[key] = (weatherValue + hourValue) / 2;
         });
 
         combined.push(combinedItem);
     }
 
-    return combined.sort((a, b) => parseInt(Object.keys(a)[0]) - parseInt(Object.keys(b)[0]));
+    return combined.sort((a, b) => Number(Object.keys(a)[0]) - Number(Object.keys(b)[0]));
 }
 
 export default CombinedVisualizationPage;

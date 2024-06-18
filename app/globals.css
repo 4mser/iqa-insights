@@ -39,3 +39,19 @@ h1, h2, h3, h4, h5, h6 {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+.sunrise .sunrise\:bg-sunriseBg {
+  background-color: #FFDDC1;
+}
+
+.sunset .sunset\:bg-sunsetBg {
+  background-color: #FFA07A;
+}
+
+.dark .dark\:bg-darkBg {
+  background-color: #121212;
+}
+
+.light .light\:bg-lightBg {
+  background-color: #F9FAFB;
+}

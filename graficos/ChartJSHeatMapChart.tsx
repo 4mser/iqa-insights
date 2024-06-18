@@ -26,7 +26,7 @@ function calculateAverages(data: { [column: string]: number }[]): { labels: stri
         });
     });
 
-    const labels = Object.keys(sums);
+    const labels = Object.keys(sums).sort((a, b) => Number(a) - Number(b));  // Convertir a número y ordenar
     const averages = labels.map(key => sums[key] / counts[key]);
     return { labels, averages };
 }
@@ -91,7 +91,7 @@ const ChartJSHeatMapChart: React.FC<ChartJSHeatMapChartProps> = ({ data, selecti
 
     const matrixData = labels.map((label, index) => ({
         x: index,
-        y: 0,  // We can keep y constant as 0 for a 1D heatmap
+        y: 0,  // Mantener y constante como 0 para un heatmap 1D
         v: averages[index]
     })) as MatrixDataPoint[];
 
@@ -121,19 +121,28 @@ const ChartJSHeatMapChart: React.FC<ChartJSHeatMapChartProps> = ({ data, selecti
                 display: false
             },
             tooltip: {
-                enabled: true
+                enabled: true,
+                callbacks: {
+                    label: function(context) {
+                        const value = (context.raw as MatrixDataPoint).v;
+                        return `IQA Value: ${value.toFixed(2)}`;
+                    }
+                }
             }
         },
         scales: {
             x: {
                 type: 'linear',
                 position: 'bottom',
-                display: false,
+                display:false,
                 ticks: {
                     autoSkip: false,
                     maxRotation: 0,
                     minRotation: 0,
-                    color: theme === 'dark' ? 'white' : '#2E3339'
+                    color: theme === 'dark' ? 'white' : '#2E3339',
+                    callback: function(value) {
+                        return labels[value as number];
+                    }
                 },
                 title: {
                     display: false,
@@ -142,7 +151,7 @@ const ChartJSHeatMapChart: React.FC<ChartJSHeatMapChartProps> = ({ data, selecti
                 }
             },
             y: {
-                display: false  // Hide the y-axis for 1D heatmap
+                display: false  // Ocultar el eje y para heatmap 1D
             }
         }
     };
