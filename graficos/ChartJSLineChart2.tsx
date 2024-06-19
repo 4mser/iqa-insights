@@ -5,21 +5,29 @@ import { Line } from 'react-chartjs-2';
 import { Chart, ChartData, ChartOptions, TooltipItem } from 'chart.js';
 import { useIsClient } from './useIsClient';  // Ajusta la ruta según sea necesario
 
-function calculateAverages(data: { [column: string]: number }[]): { labels: string[], averages: number[] } {
+function calculateAverages(data: { [column: string]: number }[]): { labels: string[], averages: number[], minMax: { min: number, max: number }[] } {
     const sums: { [key: string]: number } = {};
     const counts: { [key: string]: number } = {};
+    const minMax: { [key: string]: { min: number, max: number } } = {};
     data.forEach(entry => {
         Object.keys(entry).forEach(column => {
             if (entry[column] !== undefined && entry[column] !== null && !isNaN(entry[column])) {
                 sums[column] = (sums[column] || 0) + entry[column];
                 counts[column] = (counts[column] || 0) + 1;
+                if (!minMax[column]) {
+                    minMax[column] = { min: entry[column], max: entry[column] };
+                } else {
+                    if (entry[column] < minMax[column].min) minMax[column].min = entry[column];
+                    if (entry[column] > minMax[column].max) minMax[column].max = entry[column];
+                }
             }
         });
     });
 
     const labels = Object.keys(sums).sort((a, b) => Number(a) - Number(b));  // Convertir a número y ordenar
     const averages = labels.map(key => sums[key] / counts[key]);
-    return { labels, averages };
+    const minMaxArray = labels.map(key => minMax[key]);
+    return { labels, averages, minMax: minMaxArray };
 }
 
 interface DataItem {
@@ -32,11 +40,12 @@ interface ChartDataProps {
 
 interface ChartJSLineChartProps {
     data: ChartDataProps;
+    minMaxData: { key: number, min: number, max: number }[];
     selection: string;
     color: string;
 }
 
-const ChartJSLineChart: React.FC<ChartJSLineChartProps> = ({ data, selection, color }) => {
+const ChartJSLineChart2: React.FC<ChartJSLineChartProps> = ({ data, minMaxData, selection, color }) => {
     const isClient = useIsClient();
     const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
@@ -78,7 +87,7 @@ const ChartJSLineChart: React.FC<ChartJSLineChartProps> = ({ data, selection, co
         return <div>No valid data available</div>;
     }
 
-    const { labels, averages } = calculateAverages(cleanedData);
+    const { labels, averages, minMax } = calculateAverages(cleanedData);
 
     const chartData: ChartData<'line'> = {
         labels: labels,  // No need to convert to string as ChartJS handles it
@@ -88,6 +97,26 @@ const ChartJSLineChart: React.FC<ChartJSLineChartProps> = ({ data, selection, co
                 data: averages,
                 borderColor: color,
                 backgroundColor: color,
+                fill: false,
+                tension: 0.1
+            },
+            {
+                label: 'Min IQA Value',
+                data: minMaxData.map(item => item.min),
+                borderColor: 'rgba(0, 255, 0, 0.5)',
+                backgroundColor: 'rgba(0, 255, 0, 0.5)',
+                showLine: false,
+                pointRadius: 5,
+                fill: false,
+                tension: 0.1
+            },
+            {
+                label: 'Max IQA Value',
+                data: minMaxData.map(item => item.max),
+                borderColor: 'rgba(255, 0, 0, 0.5)',
+                backgroundColor: 'rgba(255, 0, 0, 0.5)',
+                showLine: false,
+                pointRadius: 5,
                 fill: false,
                 tension: 0.1
             }
@@ -135,7 +164,9 @@ const ChartJSLineChart: React.FC<ChartJSLineChartProps> = ({ data, selection, co
                 },
                 ticks: {
                     color: theme === 'dark' ? 'white' : '#2E3339'
-                }
+                },
+                min: 0,
+                max: 120
             }
         }
     };
@@ -143,4 +174,4 @@ const ChartJSLineChart: React.FC<ChartJSLineChartProps> = ({ data, selection, co
     return <div style={{ position: 'relative', width: '100%', height: '400px' }}><Line data={chartData} options={options} /></div>;
 };
 
-export default ChartJSLineChart;
+export default ChartJSLineChart2;
