@@ -127,6 +127,7 @@ const CombinedVisualizationPage: React.FC = () => {
             </div>
             
 
+                <p className='py-2 text-neutral-800/80 font-bold dark:text-white/70'>{`Average IQA Values for ${hourSelection ? hourSelection : 'All Hours'} on a ${weatherSelection ? weatherSelection : 'All Weather Conditions'} Day`}</p>
             <div className='relative' style={{ minHeight: '400px' }}>
                 {loading && (
                     <div className='absolute inset-0 flex items-center justify-center'>
@@ -135,15 +136,14 @@ const CombinedVisualizationPage: React.FC = () => {
                 )}
                 {!loading && (
                     <>
-                        <ChartJSLineChart2 data={{ 'Combined': combinedData.averages }} minMaxData={combinedData.minMax} selection='Combined' color="rgba(255, 0, 0, 1)" />
+                        <ChartJSLineChart2 data={{ 'Combined': combinedData.averages }} minMaxData={combinedData.minMax} selection='Combined' color="rgba(200, 20, 30, 1)" />
                         <div className='mt-8'>
-                            <ChartJSHeatMapChart data={{ 'Combined': combinedData.averages }} selection='Combined' color="255, 0, 0" />
+                            <ChartJSHeatMapChart data={{ 'Combined': combinedData.averages }} selection='Combined' color="200, 20, 30" />
                         </div>
                     </>
                 )}
             </div>
 
-            <p className='py-2 text-neutral-800/80 font-bold dark:text-white/70'>{`Average IQA Values for ${hourSelection ? hourSelection : 'All Hours'} on a ${weatherSelection ? weatherSelection : 'All Weather Conditions'} Day`}</p>
             
             {highestValue && (
                 <p className='py-2 text-neutral-800/80 font-bold dark:text-white/70'>{`Highest IQA Value: ${highestValue.value} at ${highestValue.key} degrees`}</p>
