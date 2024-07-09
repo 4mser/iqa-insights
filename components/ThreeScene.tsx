@@ -182,7 +182,7 @@ const GroundBlock: React.FC<{ width: number; length: number; height: number }> =
 const ThreeScene: React.FC<{ onAngleSelect: (angle: number) => void }> = ({ onAngleSelect }) => {
   const [positionAngle, setPositionAngle] = useState<number>(0);
   const [displayAngle, setDisplayAngle] = useState<number>(0);
-  const [groundVisible, setGroundVisible] = useState<boolean>(true);
+  const [groundVisible, setGroundVisible] = useState<boolean>(false);
   const [groundBlockVisible, setGroundBlockVisible] = useState<boolean>(true);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
