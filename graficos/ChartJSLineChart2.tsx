@@ -149,7 +149,7 @@ const ChartJSLineChart2: React.FC<ChartJSLineChartProps> = ({ data, minMaxData, 
             x: {
                 title: {
                     display: true,
-                    text: 'Category',
+                    text: 'Vision Angle',
                     color: theme === 'dark' ? 'white' : '#2E3339'
                 },
                 ticks: {

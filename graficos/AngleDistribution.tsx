@@ -5,9 +5,10 @@ import { Bar } from 'react-chartjs-2';
 const AngleDistributionChart: React.FC<{ angle: number, weatherData: any, hourData: any }> = ({ angle, weatherData, hourData }) => {
   const extractData = (data: any, angle: number) => {
     if (!data) return [0, 0, 0, 0]; // Return default data if input is invalid
+
     return Object.keys(data).map(time => {
-      const relevantData = data[time].map((item: any) => item[angle] || 0);
-      return relevantData.reduce((a: number, b: number) => a + b, 0) / relevantData.length;
+      const relevantData = data[time].map((item: any) => item[angle.toString()] !== undefined ? item[angle.toString()] : 0);
+      return relevantData.length ? (relevantData.reduce((a: number, b: number) => a + b, 0) / relevantData.length) : 0;
     });
   };
 
@@ -56,6 +57,7 @@ const AngleDistributionChart: React.FC<{ angle: number, weatherData: any, hourDa
           display: true,
           text: 'IQA Value',
         },
+        beginAtZero: true,
       },
     },
   };

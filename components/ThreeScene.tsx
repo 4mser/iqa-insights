@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { Suspense, useState, useRef, useEffect } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
@@ -145,10 +145,45 @@ const Ground: React.FC<{ width: number; length: number; opacity: number }> = ({ 
   return null;
 };
 
+const GroundBlock: React.FC<{ width: number; length: number; height: number }> = ({ width, length, height }) => {
+  const { scene } = useThree();
+  const textureRef = useRef<THREE.Texture | null>(null);
+  const materialRef = useRef<THREE.MeshBasicMaterial>();
+
+  if (!textureRef.current) {
+    const loader = new THREE.TextureLoader();
+    textureRef.current = loader.load('/images/ground.jpg');
+    textureRef.current.wrapS = THREE.RepeatWrapping;
+    textureRef.current.wrapT = THREE.RepeatWrapping;
+    textureRef.current.repeat.set(1, 1);
+  }
+
+  if (!materialRef.current) {
+    materialRef.current = new THREE.MeshBasicMaterial({
+      map: textureRef.current,
+      side: THREE.DoubleSide,
+    });
+  }
+
+  const geometry = new THREE.BoxGeometry(width, height, length);
+  const groundBlock = new THREE.Mesh(geometry, materialRef.current);
+  groundBlock.position.set(0, (-height - 0.01) / 2, -3.6);
+
+  useEffect(() => {
+    scene.add(groundBlock);
+    return () => {
+      scene.remove(groundBlock);
+    };
+  }, [scene, groundBlock]);
+
+  return null;
+};
+
 const ThreeScene: React.FC<{ onAngleSelect: (angle: number) => void }> = ({ onAngleSelect }) => {
   const [positionAngle, setPositionAngle] = useState<number>(0);
   const [displayAngle, setDisplayAngle] = useState<number>(0);
   const [groundVisible, setGroundVisible] = useState<boolean>(true);
+  const [groundBlockVisible, setGroundBlockVisible] = useState<boolean>(true);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
   useEffect(() => {
@@ -173,6 +208,10 @@ const ThreeScene: React.FC<{ onAngleSelect: (angle: number) => void }> = ({ onAn
     setGroundVisible(!groundVisible);
   };
 
+  const toggleGroundBlockVisibility = () => {
+    setGroundBlockVisible(!groundBlockVisible);
+  };
+
   const angleOptions = [-45, -30, -15, 0, 15, 30, 45];
 
   return (
@@ -187,6 +226,7 @@ const ThreeScene: React.FC<{ onAngleSelect: (angle: number) => void }> = ({ onAn
             <SpotModel positionAngle={positionAngle} />
             <PyramidModel positionAngle={positionAngle} isDarkMode={isDarkMode} />
             {groundVisible && <Ground width={10} length={7} opacity={0.9} />}
+            {groundBlockVisible && <GroundBlock width={10} length={7} height={0.5} />}
             <WindowModel isDarkMode={isDarkMode} />
             <EffectComposer>
               <Bloom luminanceThreshold={1} luminanceSmoothing={1} height={0} />
@@ -213,7 +253,10 @@ const ThreeScene: React.FC<{ onAngleSelect: (angle: number) => void }> = ({ onAn
           ))}
         </div>
         <button onClick={toggleGroundVisibility} className='bg-black/20 border border-white/20 p-px text-white rounded-full px-2 py-2 shadow-md mt-4 transition-colors duration-500'>
-          {groundVisible ? 'Hide Ground' : 'Show Ground'}
+          {groundVisible ? 'Hide Traversing Trajectory' : 'Show Traversing Trajectory'}
+        </button>
+        <button onClick={toggleGroundBlockVisibility} className='bg-black/20 border border-white/20 p-px text-white rounded-full px-2 py-2 shadow-md mt-4 transition-colors duration-500'>
+          {groundBlockVisible ? 'Hide Ground Block' : 'Show Ground Block'}
         </button>
       </section>
     </main>

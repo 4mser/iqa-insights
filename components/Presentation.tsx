@@ -113,11 +113,11 @@ const ExperimentPresentation: React.FC = () => {
               <Bar data={section.chartData} />
             </div>
           )}
-          {section.images && section.images.map((image, imgIndex) => (
+          {/* {section.images && section.images.map((image, imgIndex) => (
             <div key={imgIndex} className="mb-4">
               <img src={image.src} alt={image.alt} className="rounded-lg shadow-lg" />
             </div>
-          ))}
+          ))} */}
         </motion.div>
       ))}
       <motion.div

@@ -120,7 +120,7 @@ const ChartJSLineChart: React.FC<ChartJSLineChartProps> = ({ data, selection, co
             x: {
                 title: {
                     display: true,
-                    text: 'Category',
+                    text: 'Image Patches',
                     color: theme === 'dark' ? 'white' : '#2E3339'
                 },
                 ticks: {

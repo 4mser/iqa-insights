@@ -21,7 +21,7 @@ const pages = [
   },
   {
     id: 1,
-    title: "3D Scene",
+    title: "Simulation",
     component: (
       <div className="w-full h-full">
         <RenderScene />
