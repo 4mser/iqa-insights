@@ -119,7 +119,26 @@ const ChartJSLineChart2: React.FC<ChartJSLineChartProps> = ({ data, minMaxData, 
                 pointRadius: 5,
                 fill: false,
                 tension: 0.1
-            }
+            },
+            {
+                label: 'IQA Range',
+                data: minMaxData.map((item, index) => item.min),
+                fill: '+1',
+                backgroundColor: 'rgba(255, 0, 0, 0.05)', // Color rojo con opacidad
+                borderColor: 'rgba(0, 0, 0, 0)',
+                pointRadius: 0,
+                tension: 0.1,
+                
+            },
+            {
+                label: 'IQA Range Max',
+                data: minMaxData.map((item, index) => item.max),
+                fill: '-1',
+                backgroundColor: 'rgba(255, 0, 0, 0.05)', // Color rojo con opacidad
+                borderColor: 'rgba(0, 0, 0, 0)',
+                pointRadius: 0,
+                tension: 0.1,
+            },
         ]
     };
 
