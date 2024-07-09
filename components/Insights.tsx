@@ -71,13 +71,6 @@ const sections = [
           Positions with high contrast values should be prioritized for detailed inspections to ensure the detection of subtle defects.
         `
       },
-      {
-        title: 'Recommendations',
-        content: `
-          Enhance the robotic algorithm to prioritize angles with higher contrast values during critical inspection tasks. 
-          Conduct further analysis to understand the environmental factors contributing to the peaks in contrast values at specific angles.
-        `
-      }
     ]
   },
   {
@@ -100,13 +93,6 @@ const sections = [
           Understanding the variation in shading values can help refine the robotic inspection process to adapt to different lighting conditions.
         `
       },
-      {
-        title: 'Recommendations',
-        content: `
-          Implement adaptive algorithms that adjust the robot’s position based on real-time shading values to enhance inspection quality. 
-          Further research into the causes of shading variation at different angles can help optimize robotic movement for better defect detection.
-        `
-      }
     ]
   },
   {
@@ -127,13 +113,6 @@ const sections = [
         content: `
           High exposure values at certain angles can guide the robot to focus on these positions for capturing images under varying lighting conditions. 
           Consistent exposure is crucial for reliable image analysis, making it essential to identify and prioritize optimal angles.
-        `
-      },
-      {
-        title: 'Recommendations',
-        content: `
-          Adjust the robotic inspection strategy to incorporate angles with higher exposure values for critical inspection tasks. 
-          Develop algorithms that dynamically adjust exposure settings based on real-time data to ensure consistent image quality.
         `
       }
     ]
